@@ -12,7 +12,7 @@ Hence we want to make the process ease we will apply some of the modern ML Model
 
 In the process of finding data information, we use some of the popular Machine Learning methods and techniques, to name: data cleaning, data discovery, data visualisation and some model approaches.
 
-this data set contains transactions made by credit card in september 2013. this dataset was orginally maintained by **www. kaggle.com/** . which it has 492 frauds and 284807 transactions. 
+this data set contains transactions made by credit card in september 2013. this dataset was orginally downloaded from **www.kaggle.com/** . which it has 492 frauds and 284807 transactions. 
 
 This dataset is highly unbalanced.
 
