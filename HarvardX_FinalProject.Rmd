@@ -1,0 +1,414 @@
+---
+title: "Credit Card Fradulent Detection_Final Project"
+author: "Vasu Gandhapudi"
+date: "September 06, 2020"
+output: 
+        pdf_document:
+        toc: true
+        toc_depth: 3
+        number_sections: true
+---
+
+  
+# Overview: A Gentle Introduction:  
+
+This project is designed as a final project submission towards Harvardx data science learning initiative. We use the knowledge gained in the course series and its interdisciplinary area to apply data knowledge using scientific methods, techniques, models and  algorithms.
+
+
+## Aim of the project  
+
+The aim of the project is to bild a classifer and discover the **Credit Card Fradulent transaction**  which is a majour concern in most of the financial institutes. Analysing fraudelent manually is unfeasible due to huge amount of data and it's complexity. 
+
+Hence we want to make the process ease we will apply some of the modern ML Models,algorithms and techniques in this project.
+
+In the process of finding data information, we use some of the popular Machine Learning methods and techniques, to name: data cleaning, data discovery, data visualisation and some model approaches.
+
+this data set contains transactions made by credit card in september 2013. this dataset was orginally maintained by **www. kaggle.com/** . which it has 492 frauds and 284807 transactions. 
+
+This dataset is highly unbalanced.
+
+It contains only numerical variables which are results for PCA transactions, and this dataset contains features from V1 to V28 are the principal component obtained with PCA. the only features which are not been transformed are "Time" and "Amount". Feature "Class" is the response variable and it takes values 1 and 0.
+
+some of the models that we use in this project are:
+1. Logistic Regression Model.
+2. Decision Tree Model.
+3. K-Fold Cross Validation.
+4. Random Forest.
+5. XGBoost.
+
+
+## Dataset download urls  
+
+this datasets can be obtained from the below links:
+
+**https://ln2.sync.com/dl/cc02c4800/pv3day6w-i2xn38sr-izd9apca-dsxrqhnd/view/default/9384339740003**
+
+**https://www.kaggle.com/vasugv/credit-card-fraud-detection**
+
+**https://www.kaggle.com/mlg-ulb/creditcardfraud**
+
+
+**Note: This dataset was purely intended and stored in below Git hub account is for learning purpose**
+
+**https://github.com/vasu0907/Datasets**
+
+# Project Librarys  
+
+
+```{r Loading Librarys, echo=TRUE, message= FALSE, warning= FALSE, eval=TRUE}
+### Import Library's for the project
+
+if(!require(dplyr)) 
+  install.packages("dplyr", repos = "https://dplyr.tidyverse.org")
+if(!require(caret))
+  install.packages("caret", repos = "http://cran.us.r-project.org")
+if(!require(data.table))
+  install.packages("data.table", repos = "http://cran.us.r-project.org")
+if(!require(ggplot2))
+  install.packages("ggplot2", repos = "http://ggplot2.tidyverse.org")
+if(!require(pROC))
+  install.packages("pROC", repos = "https://web.expasy.org/pROC/")
+if(!require(rpart))
+  install.packages("rPart", repos = "https://cran.r-project.org/package=rpart")
+if(!require(rpart.plot))
+  install.packages("rpart.plot", repos = "http://www.milbo.org/rpart-plot")
+if(!require(gbm))
+  install.packages("gbm", repos = "https://github.com/gbm-developers/gbm")
+if(!require(randomForest)) 
+  install.packages("randomForest", repos = "https://www.stat.berkeley.edu/~breiman/RandomForests/")
+if(!require(xgboost))
+  install.packages("xgboost", repos = "https://github.com/dmlc/xgboost")
+if(!require(caTools)) 
+  install.packages("caTools", repos = "https://CRAN.R-project.org/package=caTools")
+if(!require(ranger)) install.packages("ranger", repos = "https://github.com/imbs-hl/ranger")
+```  
+
+
+## Download Dataset  
+
+
+```{r download Dataset, echo=TRUE, message=FALSE, warning=FALSE, eval=TRUE}
+## For demonstration and better access, The dataset was download and placed in Github account.
+
+creditcard_data <- fread("https://media.githubusercontent.com/media/vasu0907/Datasets/master/creditcard.csv", header = TRUE, sep = ",")  
+```  
+
+# Data Exploration:- Revising R concepts on df.  
+
+
+```{r, echo=TRUE, message=FALSE, warning=FALSE, eval=TRUE}
+dim(creditcard_data)
+head(creditcard_data, 3)
+tail(creditcard_data, 3)
+names(creditcard_data)
+summary(creditcard_data)
+```  
+
+**Standard deviation for the value name "Amount"**  
+
+
+```{r SD, echo=TRUE, eval=TRUE}
+sd(creditcard_data$Amount)
+```  
+
+
+# Data Manipulation  
+
+
+#### check is there any NA values in the dataset  
+
+
+```{r Data Manipulation, echo=TRUE, message=FALSE, warning=FALSE, eval=TRUE}
+apply(creditcard_data,2,function(x) sum(is.na(x)))
+creditcard_data %>% group_by(Class) %>% summarise(mean(Amount), median(Amount))  
+```  
+
+
+We will scale our data using the scale() function. We will apply this to the amount component of our creditcard_data amount.
+
+Scaling is also known as feature standardization. With the help of scaling, the data is structured according to a specified range. 
+
+Therefore, there are no extreme values in our dataset that might interfere with the functioning of our model.  
+
+
+```{r, echo=TRUE, message=FALSE, warning=FALSE, eval=TRUE}
+creditcard_data$Amount=scale(creditcard_data$Amount)
+NewData=creditcard_data[,-c(1)]
+```  
+
+
+# Data Modeling    
+
+
+```{r , echo=TRUE, message= FALSE, warning=FALSE, eval=TRUE}
+## Split data set into train and test
+set.seed(123)
+data_sample <- sample.split(NewData$Class, SplitRatio = 0.80)
+train_dataset <- subset(NewData, data_sample == TRUE)
+test_dataset <- subset(NewData, data_sample == FALSE)
+dim(train_dataset)
+dim(test_dataset)
+```  
+
+
+## Modeling techinque for optimize  & Algorithms to predict.  
+
+
+### Fitting Logistic Regression Model:1  
+
+
+Logistic regression is a simple regression model whose output is a score between 0 and 1.  
+
+
+This model can be fitted using Gradient descent on the parameter vector beta. Equipped with some basic information.
+
+
+```{r, echo=TRUE, message=FALSE,warning=FALSE,eval=TRUE}
+Logistic_Model=glm(Class~., train_dataset, family = binomial())
+summary(Logistic_Model)
+plot(Logistic_Model)
+```  
+
+
+**Confusion Matrix**  
+
+Confusion matrix is a very useful tool for calibrating the output of a model and examining all possible outcomes of your predictions (true positive, true negative, false positive, false negative).
+let us Use a threshold of 0.5 to transform predictions to binary and we will see how the model will fit.  
+
+
+```{r,echo=TRUE, message=FALSE,warning=FALSE,eval=TRUE}
+Confusion_matrix <- confusionMatrix(table(test_dataset$Class, as.numeric(predict(Logistic_Model, test_dataset, type = "response") > 0.5)))
+print(Confusion_matrix)
+```  
+
+
+A simple logistic regression model achieved nearly 100% accuracy, with ~99% precision (positive predictive value) and ~100% recall (sensitivity). We can see there are only 7 false negatives (transactions which were fraudulent in reality but on identified as such by the model).  
+
+
+
+```{r,echo=TRUE}
+fourfoldplot(Confusion_matrix$table)
+```  
+
+In order to assess the performance of our model, we will describe the ROC curve.  
+
+ROC is also known as Receiver Optimistic Characteristics.  
+
+
+```{r, echo=TRUE,message=FALSE, warning=FALSE,eval=TRUE}
+lr.predict <- predict(Logistic_Model,train_dataset, probability = TRUE)
+auc.gbm <- roc(train_dataset$Class, lr.predict)
+plot(auc.gbm, main=paste0("AUC: ", round(pROC::auc(auc.gbm), 3)), col= "blue")
+```  
+
+ ROC on unpredicted test data  
+
+
+```{r,echo=TRUE,message=FALSE,warning=FALSE,eval=TRUE}
+lr.predict_roc <- predict(Logistic_Model, test_dataset,probability= TRUE)
+auc.gbm <- roc(test_dataset$Class, lr.predict_roc)
+plot(auc.gbm, main=paste0("AUC: ", round(pROC::auc(auc.gbm), 3)), col = "blue")  
+```
+
+
+### Fitting a Decision Tree Models: 2  
+
+** Note: It will take a little bit time for this Decision Tree model**  
+
+We will Implement Decission Tree Algorithm and to plot the out come of decision, these outcomes are basically a consequence through which we can conclude as to what class the object belongs to. We will now implement our decision tree model and will plot it using the rpart.plot() function.  
+
+
+```{r,echo=TRUE,message=FALSE,warning=FALSE,eval=TRUE}
+decissionTree_model <- rpart(Class~., creditcard_data, method = 'class')
+predict_val <- predict(decissionTree_model, creditcard_data, type = 'class')
+probability <- predict(decissionTree_model, creditcard_data, type = 'prob')
+```  
+
+
+```{r, echo=TRUE,message=FALSE,warning=FALSE,eval=TRUE}
+summary(decissionTree_model) 
+```  
+
+
+**Plot**  
+
+
+```{r, echo=TRUE}
+rpart.plot(decissionTree_model)
+```  
+
+
+### K-Fold with Cross-Validation Model:3  
+
+
+The K-fold cross validation is go-to-method for evaluating the performance of an algorithm on dataset. 
+In terms of how to select k  for cross validation, larger values of  k  are preferable but they will also take much more computational time. For this reason, the choices of k=5  and  k=10  are common.
+we are using SMOTE resampling the data, with 5-fold cv and trains Random forest classifier with roc as a metric.
+
+**K-fold cross Validation**  
+
+```{r, echo=TRUE, message=FALSE, warning=FALSE,eval=TRUE}
+CV_control <- trainControl(method = "cv",
+                              number = 5,
+                              verboseIter = T,
+                              classProbs = T,
+                              sampling = "smote",
+                              summaryFunction = twoClassSummary,
+                              savePredictions = T)
+
+train_dataset_CV <- train_dataset
+train_dataset_CV$Class <- as.factor(train_dataset_CV$Class)
+levels(train_dataset_CV$Class) <- make.names(c(0,1))
+model_CV <- train(Class~., data = train_dataset_CV, method = "rpart", trControl = CV_control, 
+                  metric = 'ROC')
+print(model_CV)
+plot(model_CV)
+```  
+
+
+Now let see the model performing on unpredicted Test data. 
+
+Cross Validation does give an unbiased estimation of the algorithms performance on unseen dataset.
+
+```{r, echo=TRUE,message=FALSE, warning=FALSE,eval=TRUE}
+Model_CV_predict <- predict(model_CV, test_dataset, type = "prob")
+Confussion_matrix_CV <- confusionMatrix(table(as.numeric(Model_CV_predict$X1 > 0.5), test_dataset$Class))
+print(Confussion_matrix_CV)
+```  
+
+** ROC on unpredicted test data**  
+
+
+```{r, echo=TRUE, message=FALSE, warning=FALSE,eval=TRUE}
+model_CV_roc <- roc(test_dataset$Class, predict(model_CV,test_dataset, type = "prob")$X1)  
+print(model_CV_roc)
+plot(model_CV_roc, main = paste0("AUC: ", round(pROC::auc(model_CV_roc), 3)), col = "blue")
+```  
+
+
+#### Repeated k-fold Cross Validation Method: 2  
+
+
+The process of splitting the data into k-folds can be repeated a number of times, this is called Repeated k-fold Cross Validation. The final model accuracy is taken as the mean from the number of repeats.  
+
+
+```{r,echo=TRUE,message=FALSE,warning=FALSE,eval=TRUE}
+CV_repeat <- trainControl(method = "repeatedcv",
+                           number = 5,
+                           repeats = 3,
+                           verboseIter = T,
+                           classProbs = T,
+                           sampling = "smote",
+                           summaryFunction = twoClassSummary,
+                           savePredictions = T)
+model_repet <- train(Class~., data = train_dataset_CV, trControl = CV_repeat, method = 'rpart2', metric = 'ROC')
+print(model_repet)
+plot(model_repet)
+```  
+
+
+Now let see the model performing on unpredicted Test data.  
+
+
+```{r,echo=TRUE, message=FALSE,warning=FALSE,eval=TRUE}
+CV_repeat_pred <- predict(model_repet, test_dataset, type = 'prob')
+confussion_Matrix_CVRepet <- confusionMatrix(table(as.numeric(CV_repeat_pred$X1 >0.5),test_dataset$Class))
+print(confussion_Matrix_CVRepet)
+```  
+
+
+** ROC on unpredicted test data **  
+
+```{r,echo=TRUE,warning=FALSE,message=FALSE,eval=TRUE}
+CV_repet_roc <- roc(test_dataset$Class, predict(model_repet,test_dataset, type = "prob")$X1)
+print(CV_repet_roc)
+plot(CV_repet_roc, main = paste0("AUC: ", round(pROC::auc(CV_repet_roc), 3)), col ="blue")
+```  
+
+### Random forest Model: 4   
+
+the code below uses the SMOTE to resample the data with 5 fold cv perfomance and trains a Random Forest Classifier using ROC as a metric.
+
+```{r,echo=TRUE,message=FALSE,warning=FALSE,eval=TRUE}
+Model_rf <- trainControl(method = "cv",
+                          number = 5,
+                          verboseIter = T,
+                          classProbs = T,
+                          sampling = "smote",
+                          summaryFunction = twoClassSummary,
+                          savePredictions = T)
+
+train_dataset_rf <- train_dataset
+train_dataset_rf$Class <- as.factor(train_dataset_rf$Class)
+levels(train_dataset_rf$Class) <- make.names(c(0,1))
+Model_rf <- train(Class~., data = train_dataset_rf, method = 'rf', trControl = Model_rf, metric = 'ROC')
+print(Model_rf)
+plot(Model_rf)
+plot(varImp(Model_rf))
+```  
+
+
+** Now let see the model performing on unpredicted Test data.**  
+
+
+```{r, echo=TRUE,message=FALSE,warning=FALSE,eval=TRUE}
+rf_pred <- predict(Model_rf, test_dataset, type = "prob")
+Confusion_matrix_rf <- confusionMatrix(table(as.numeric(rf_pred$X1 > 0.5), test_dataset$Class))
+print(Confusion_matrix_rf)
+```  
+
+
+** Now we will look ROC on unpredicted test data.**  
+
+
+```{r,echo=TRUE,message=FALSE,warning=FALSE,eval=TRUE}
+rf_roc <- roc(test_dataset$Class, predict(Model_rf, test_dataset, type = "prob")$X1)
+print(rf_roc)
+plot(rf_roc, main = paste0("AUC: ", round(pROC::auc(rf_roc), 4)), col ="blue")
+```  
+
+
+### Model XG Boost: Gradient Boosted Tress: 5  
+
+Finally we will use XGboost which is based on Gradient Boosted Tress, which is a most powerful model when compared to the other models discussed above.
+
+```{r,echo=TRUE,message=FALSE,warning=FALSE,eval=TRUE}
+train_XGB <- xgb.DMatrix(data = as.matrix(train_dataset[, -c("Class")]), label = as.numeric(train_dataset$Class)) 
+Model_xgb <- xgboost(data = train_XGB, nrounds = 100, gamma = 0.1, max_depth = 10, objective = "binary:logistic", nthread = 7)
+```  
+
+
+
+** Let's see into unseen test test**  
+
+
+```{r,echo=TRUE, message=FALSE,warning=FALSE,eval=TRUE}
+test_XBG <- xgb.DMatrix(data = as.matrix(test_dataset[, -c("Class")]), label = as.numeric(test_dataset$Class))
+predit_xgb <- predict(Model_xgb,test_XBG)
+confusionMatrix(table(as.numeric(predit_xgb > 0.5), test_dataset$Class))
+```  
+
+
+** Let's see ROC for XGBoost**  
+
+
+```{r,echo=TRUE,message=FALSE,warning=FALSE,eval=TRUE}
+roc_xgb <- roc(test_dataset$Class, predit_xgb)
+print(roc_xgb)
+plot(roc_xgb, main = paste0("AUC: ", round(pROC::auc(roc_xgb), 4)), col = "blue")
+```  
+
+
+# Summary:  
+
+In the credit Card Fraudulent detection project we have a applied some of common and popular Machine Learning Models / algorithms to detect fraudulent. 
+
+Based on over exploration it has shown that even a very simple logistic regression model can achieved good recall. while the other models improve in term of Logistic Regression in terms of AUC.
+
+As we see the best model: XGBoost (0.9769), Random Forest (0.9798) with a very marginal difference when comparative with Logistic Regression in terms of AUC.
+
+# Appendix - Enviroment
+```{r environment}
+version
+```
+
