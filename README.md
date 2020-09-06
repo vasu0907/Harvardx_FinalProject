@@ -24,3 +24,12 @@ some of the models that we use in this project are:
 3. K-Fold Cross Validation.
 4. Random Forest.
 5. XGBoost.
+
+Dataset Download Url:
+
+Dataset can also download from below url:
+https://ln2.sync.com/dl/cc02c4800/pv3day6w-i2xn38sr-izd9apca-dsxrqhnd/view/default/9384339740003
+
+https://www.kaggle.com/vasugv/credit-card-fraud-detection
+
+
