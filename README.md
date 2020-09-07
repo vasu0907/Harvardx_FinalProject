@@ -12,7 +12,7 @@ Hence we want to make the process ease we will apply some of the modern ML Model
 
 In the process of finding data information, we use some of the popular Machine Learning methods and techniques, to name: data cleaning, data discovery, data visualisation and some model approaches.
 
-this data set contains transactions made by credit card in september 2013. this dataset was orginally maintained by **www. kaggle.com/** . which it has 492 frauds and 284807 transactions. 
+this data set contains transactions made by credit card in september 2013. this dataset was orginally downloaded from **www.kaggle.com/** . which it has 492 frauds and 284807 transactions. 
 
 This dataset is highly unbalanced.
 
@@ -24,3 +24,12 @@ some of the models that we use in this project are:
 3. K-Fold Cross Validation.
 4. Random Forest.
 5. XGBoost.
+
+Dataset Download Url:
+
+Dataset can also download from below url:
+https://ln2.sync.com/dl/cc02c4800/pv3day6w-i2xn38sr-izd9apca-dsxrqhnd/view/default/9384339740003
+
+https://www.kaggle.com/vasugv/credit-card-fraud-detection
+
+
