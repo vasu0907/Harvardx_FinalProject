@@ -23,7 +23,7 @@ Hence we want to make the process ease we will apply some of the modern ML Model
 
 In the process of finding data information, we use some of the popular Machine Learning methods and techniques, to name: data cleaning, data discovery, data visualisation and some model approaches.
 
-this data set contains transactions made by credit card in september 2013. this dataset was orginally maintained by **www. kaggle.com/** . which it has 492 frauds and 284807 transactions. 
+this data set contains transactions made by credit card in september 2013. this dataset was orginally maintained by **www.kaggle.com/** . which it has 492 frauds and 284807 transactions. 
 
 This dataset is highly unbalanced.
 
@@ -93,6 +93,14 @@ if(!require(ranger)) install.packages("ranger", repos = "https://github.com/imbs
 creditcard_data <- fread("https://media.githubusercontent.com/media/vasu0907/Datasets/master/creditcard.csv", header = TRUE, sep = ",")  
 ```  
 
+**Note: If you have some issues on downloading the dataset automatically, Please download the dataset from any one of the above url's into your local machine and provide the path in the below Code and follow the steps:**
+
+**Step:1 Uncomment the above code** 
+**step:2 provide the path in the below code**
+**creditcard_data <- fread("provide the copied local path here", header = TRUE, sep = ",")**  
+
+
+
 # Data Exploration:- Revising R concepts on df.  
 
 
@@ -115,7 +123,7 @@ sd(creditcard_data$Amount)
 # Data Manipulation  
 
 
-#### check is there any NA values in the dataset  
+**Check is there any NA values in the dataset**  
 
 
 ```{r Data Manipulation, echo=TRUE, message=FALSE, warning=FALSE, eval=TRUE}

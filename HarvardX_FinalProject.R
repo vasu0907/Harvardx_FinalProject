@@ -31,6 +31,10 @@ if(!require(ranger)) install.packages("ranger", repos = "https://github.com/imbs
 # average Best time to download: 1 to 2 min
 creditcard_data <- fread("https://media.githubusercontent.com/media/vasu0907/Datasets/master/creditcard.csv", header = TRUE, sep = ",")
 
+# Note: If you have some issues on downloading the dataset automatically, Please download the dataset from any one of the above url's into your local machine and provide the path in the below Code:
+
+# creditcard_data <- fread("provide the copied local path here", header = TRUE, sep = ",")
+
 # Revive the concepts of R data frames -- Data Exploration
 dim(creditcard_data)
 head(creditcard_data)
