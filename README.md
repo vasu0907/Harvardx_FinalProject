@@ -6,7 +6,7 @@ This project is designed as a final project submission towards Harvardx data sci
 
 Aim of the project:  
 
-The aim of the project is to bild a classifer and discover the **Credit Card Fradulent transaction**  which is a majour concern in most of the financial institutes. Analysing fraudelent manually is unfeasible due to huge amount of data and it's complexity. 
+The aim of the project is to bild a classifer and discover the **Credit Card Fraudulent transaction**  which is a majour concern in most of the financial institutes. Analysing fraudelent manually is unfeasible due to huge amount of data and it's complexity. 
 
 Hence we want to make the process ease we will apply some of the modern ML Models,algorithms and techniques in this project.
 
